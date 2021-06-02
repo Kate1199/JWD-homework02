@@ -3,6 +3,11 @@ package by.epam.kisel.utility;
 import java.util.Scanner;
 
 import by.epam.kisel.bean.*;
+import by.epam.kisel.bean.ball.Ball;
+import by.epam.kisel.bean.ball.BallColours;
+import by.epam.kisel.bean.basket.Basket;
+import by.epam.kisel.bean.basket.RectangleBasket;
+import by.epam.kisel.bean.basket.RoundBasket;
 
 public class InputUtility {
 

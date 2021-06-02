@@ -1,8 +1,8 @@
 package by.epam.kisel.runner;
 
-import by.epam.kisel.bean.Ball;
-import by.epam.kisel.bean.BallColours;
-import by.epam.kisel.bean.Basket;
+import by.epam.kisel.bean.ball.Ball;
+import by.epam.kisel.bean.ball.BallColours;
+import by.epam.kisel.bean.basket.Basket;
 import by.epam.kisel.utility.BasketSmallerThanBallException;
 import by.epam.kisel.utility.ExcessWeightException;
 import by.epam.kisel.utility.InputUtility;
