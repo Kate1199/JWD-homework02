@@ -45,7 +45,9 @@ public class Ball {
 
 		Ball other = (Ball) obj;
 
-		return hashCode() == other.hashCode();
+		return weight == other.weight &&
+				diameter == other.diameter &&
+				(colour == other.colour || colour != null && colour.equals(other.colour));
 	}
 
 	public double getWeight() {

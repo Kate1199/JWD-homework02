@@ -14,7 +14,7 @@ public class RoundMain {
 	
 	public static void main(String[] args) {
 
-		Basket roundBasket = InputUtility.inputBasket();
+		Basket roundBasket = InputUtility.inputRoundBasket();
 
 		Ball ball1 = InputUtility.inputBall(1);
 		Ball ball2 = InputUtility.inputBall(2);
@@ -37,12 +37,12 @@ public class RoundMain {
 		System.out.println(roundBasket.toString());
 		
 		try {
-		System.out.println("\n" + roundBasket.countBallPaintedIn(BallColours.BLUE));
+			roundBasket.printBallPaintedIn(BallColours.BLUE);
+			roundBasket.remove(ball1);
+			System.out.println("\n" + roundBasket.toString() + "\n");
+			roundBasket.printBallPaintedIn(BallColours.BLUE);
 		} catch (NoSuchBallAtBasketException e) {
 			e.printStackTrace();
 		}
-		
-		roundBasket.remove(ball2);
-		System.out.println("\n" + roundBasket.toString());
 	}
 }

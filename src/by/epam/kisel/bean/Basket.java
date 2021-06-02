@@ -10,72 +10,26 @@ import by.epam.kisel.utility.NoSuchBallAtBasketException;
 import by.epam.kisel.utility.NotEnoughFreeSpaceException;
 
 public class Basket {
-	private double length;
-	private double width;
+	
+	private double volume;
 	private double height;
-	private double diameter;
 	private double weightCapacity;
-
 	private double freeSpace;
 	private double weightOfBalls;
-
-	private boolean round;
 	private ArrayList<Ball> balls = new ArrayList<>();
 
 	public Basket() {
-		length = 20;
-		width = 20;
-		height = 20;
+		volume = 125;
 		weightCapacity = 50;
-
-		freeSpace = countVolume();
-	}
-
-	public Basket(double length, double width, double height, double weightCapacity) {
-		this.length = length;
-		this.width = width;
-		this.height = height;
-		this.weightCapacity = weightCapacity;
-
-		freeSpace = countVolume();
-	}
-
-	public Basket(double diameter, double height, double weightCapacity) {
-		this.diameter = diameter;
-		this.height = height;
-		this.weightCapacity = weightCapacity;
-
-		round = true;
-		freeSpace = countVolume();
 	}
 	
-	public Ball findBy(BallColours colour) throws NoSuchBallAtBasketException {
+	public Basket(double volume, double weightCapacity) {
+		this.volume = volume;
+		this.weightCapacity = weightCapacity;
 		
-		for(Ball ball : balls) {
-			if(ball.getColour().equals(colour)) {
-				return ball;
-			} else {
-				break;
-			}
-		}
-		throw new NoSuchBallAtBasketException("There is no such ball in the basket");
+		freeSpace = volume;
 	}
-
-	public boolean isSmallerThan(Ball ball) {
-		boolean smallerThanBall;
-		boolean moreThanBasketHeight = ball.getDiameter() > height;
-
-		if (round) {
-			boolean moreThanBasketDiameter = ball.getDiameter() > diameter;
-			smallerThanBall = moreThanBasketDiameter || moreThanBasketHeight;
-		} else {
-			boolean moreThanBasketLength = ball.getDiameter() > length;
-			boolean moreThanBasketWidth = ball.getDiameter() > width;
-			smallerThanBall = moreThanBasketLength || moreThanBasketWidth || moreThanBasketHeight;
-		}
-		return smallerThanBall;
-	}
-
+		
 	public void add(Ball ball) throws BasketSmallerThanBallException, NotEnoughFreeSpaceException,
 			ExcessWeightException, NegativeValueException {
 
@@ -88,11 +42,7 @@ public class Basket {
 		+ ballWeight + " diameter = " + ballDiameter);
 		}
 
-		if (isSmallerThan(ball)) {
-			throw new BasketSmallerThanBallException("Basket is smaller than ball");
-		}
-
-		if (weightOfBalls + ballWeight < weightCapacity) {
+		if (weightOfBalls + ballWeight <= weightCapacity) {
 			weightOfBalls += ballWeight;
 		} else {
 			throw new ExcessWeightException("Ball is too heavy");
@@ -107,10 +57,14 @@ public class Basket {
 		balls.add(ball);
 	}
 	
-	public void remove(Ball ball) {
+	public void remove(Ball ball) throws NoSuchBallAtBasketException {
+		if(balls.contains(ball)) {
 		weightOfBalls -= ball.getWeight();
 		freeSpace += ball.countVolume();
 		balls.remove(ball);
+		} else {
+			throw new NoSuchBallAtBasketException("There is no such ball in the basket");
+		}
 	}
 	
 	public long countBallPaintedIn(BallColours colour) throws NoSuchBallAtBasketException {
@@ -125,15 +79,13 @@ public class Basket {
 		}
 		return numberOfPaintedBalls;
 	}
-
-	public double countVolume() {
-		double volume;
-		if (round) {
-			volume = Math.PI * height * Math.pow(diameter, 2) / 4;
-		} else {
-			volume = length * width * height;
-		}
-		return volume;
+	
+	public void printBallPaintedIn(BallColours colour) throws NoSuchBallAtBasketException {
+		System.out.println("Number of balls, painted in " + colour + ": " + countBallPaintedIn(colour));
+	}
+	
+	public boolean isHeightSmallerThan(Ball ball) {
+		return height < ball.getDiameter();
 	}
 
 	@Override
@@ -144,46 +96,16 @@ public class Basket {
 
 	@Override
 	public int hashCode() {
-		int hash;
-		if (round) {
-			hash = (int) (diameter + height) * 31;
-		} else {
-			hash = (int) (length - width + height) * 31;
-		}
+		int hash = (int) (weightCapacity - height) * 31;
 		return hash;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-
-		Basket other = (Basket) obj;
-		return hashCode() == other.hashCode();
-	}
 	
-	public boolean isRound() {
-		return round;
-	}
-
-	public double getLength() {
-		return length;
-	}
-
-	public double getWidth() {
-		return width;
+	public double getVolume() {
+		return volume;
 	}
 
 	public double getHeight() {
 		return height;
-	}
-
-	public double getDiameter() {
-		return diameter;
 	}
 
 	public double getWeightCapacity() {
@@ -196,6 +118,18 @@ public class Basket {
 
 	public double getWeightOfBalls() {
 		return weightOfBalls;
+	}
+	
+	public void setHeight(double height) {
+		this.height = height;
+	}
+	
+	public void setWeightCapacity(double weightCapacity) {
+		this.weightCapacity = weightCapacity;
+	}
+	
+	public void setFreeSpace(double freeSpace) {
+		this.freeSpace = freeSpace;
 	}
 
 }

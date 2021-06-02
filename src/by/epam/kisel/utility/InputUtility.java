@@ -26,41 +26,59 @@ public class InputUtility {
 
 		return text;
 	}
-
-	public static boolean inputBoolean(String message) {
-		boolean state;
-		System.out.println(message);
-
-		while (!sc.hasNextBoolean()) {
-			sc.next();
-		}
-		state = sc.nextBoolean();
-		return state;
+	
+	private static double inputHeight() {
+		return inputDouble("height: ");
+	}
+	
+	private static double inputWeightCapacity() {
+		return inputDouble("weightCapacity: ");
+	}
+	
+	public static Basket inputBasket() {
+		double volume;
+		double weightCapacity;
+		
+		System.out.println("Basket");
+		
+		volume = inputDouble("volume: ");
+		weightCapacity = inputWeightCapacity();
+		
+		Basket basket = new Basket(volume, weightCapacity);
+		return basket;
 	}
 
-	public static Basket inputBasket() {
-		double length = 0;
-		double width = 0;
-		double height = 0;
-		double diameter = 0;
-		double weightCapacity = 0;
+	public static Basket inputRectangleBasket() {
+		double length;
+		double width;
+		double height;
+		double weightCapacity;
+		
+		System.out.println("RectangleBasket: ");
 
-		boolean round = inputBoolean("basket is round: ");
+		length = inputDouble("length: ");
+		width = inputDouble("width: ");
+		height = inputHeight();
+		weightCapacity = inputWeightCapacity();
+		
+		Basket rectangleBasket = new RectangleBasket(length, width, height, weightCapacity);
+		return rectangleBasket;
+		
+	}
 
-		System.out.println("Basket: ");
+	public static Basket inputRoundBasket() {
+		double diameter;
+		double height;
+		double weightCapacity;
+		
+		System.out.println("RoundBasket: ");
 
-		if (round) {
-			diameter = inputDouble("diameter: ");
-		} else {
-			length = inputDouble("length: ");
-			width = inputDouble("width: ");
-		}
-		height = inputDouble("height: ");
-		weightCapacity = inputDouble("weightCapacity: ");
+		diameter = inputDouble("diameter: ");
+		height = inputHeight();
+		weightCapacity = inputWeightCapacity();
 
-		Basket rectangleBasket = new Basket(length, width, height, weightCapacity);
-		Basket roundBasket = new Basket(diameter, height, weightCapacity);
-		return round ? roundBasket : rectangleBasket;
+		Basket roundBasket = new RoundBasket(diameter, height, weightCapacity);
+		return roundBasket;
 	}
 
 	public static Ball inputBall(int number) {
