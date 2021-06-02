@@ -11,7 +11,7 @@ import by.epam.kisel.utility.NoSuchBallAtBasketException;
 import by.epam.kisel.utility.NotEnoughFreeSpaceException;
 
 public class RoundMain {
-	
+
 	public static void main(String[] args) {
 
 		Basket roundBasket = InputUtility.inputRoundBasket();
@@ -33,9 +33,9 @@ public class RoundMain {
 		} catch (NotEnoughFreeSpaceException e) {
 			e.printStackTrace();
 		}
-		
+
 		System.out.println(roundBasket.toString());
-		
+
 		try {
 			roundBasket.printBallPaintedIn(BallColours.BLUE);
 			roundBasket.remove(ball1);

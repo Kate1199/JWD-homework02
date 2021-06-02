@@ -31,24 +31,24 @@ public class InputUtility {
 
 		return text;
 	}
-	
+
 	private static double inputHeight() {
 		return inputDouble("height: ");
 	}
-	
+
 	private static double inputWeightCapacity() {
 		return inputDouble("weightCapacity: ");
 	}
-	
+
 	public static Basket inputBasket() {
 		double volume;
 		double weightCapacity;
-		
+
 		System.out.println("Basket");
-		
+
 		volume = inputDouble("volume: ");
 		weightCapacity = inputWeightCapacity();
-		
+
 		Basket basket = new Basket(volume, weightCapacity);
 		return basket;
 	}
@@ -58,24 +58,24 @@ public class InputUtility {
 		double width;
 		double height;
 		double weightCapacity;
-		
+
 		System.out.println("RectangleBasket: ");
 
 		length = inputDouble("length: ");
 		width = inputDouble("width: ");
 		height = inputHeight();
 		weightCapacity = inputWeightCapacity();
-		
+
 		Basket rectangleBasket = new RectangleBasket(length, width, height, weightCapacity);
 		return rectangleBasket;
-		
+
 	}
 
 	public static Basket inputRoundBasket() {
 		double diameter;
 		double height;
 		double weightCapacity;
-		
+
 		System.out.println("RoundBasket: ");
 
 		diameter = inputDouble("diameter: ");

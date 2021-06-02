@@ -4,7 +4,7 @@ public class Ball {
 	private double weight;
 	private double diameter;
 	private BallColours colour;
-	
+
 	public Ball() {
 		weight = 1;
 		diameter = 1;
@@ -21,12 +21,10 @@ public class Ball {
 		double volume = Math.PI * Math.pow(diameter, 3) / 6;
 		return volume;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Ball {weight = " + weight +
-				", diameter = " + diameter +
-				", colour = " + colour + "}";
+		return "Ball {weight = " + weight + ", diameter = " + diameter + ", colour = " + colour + "}";
 	}
 
 	@Override
@@ -45,9 +43,8 @@ public class Ball {
 
 		Ball other = (Ball) obj;
 
-		return weight == other.weight &&
-				diameter == other.diameter &&
-				(colour == other.colour || colour != null && colour.equals(other.colour));
+		return weight == other.weight && diameter == other.diameter
+				&& (colour == other.colour || colour != null && colour.equals(other.colour));
 	}
 
 	public double getWeight() {

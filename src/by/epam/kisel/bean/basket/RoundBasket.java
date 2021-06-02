@@ -6,7 +6,7 @@ import by.epam.kisel.utility.ExcessWeightException;
 import by.epam.kisel.utility.NegativeValueException;
 import by.epam.kisel.utility.NotEnoughFreeSpaceException;
 
-public class RoundBasket extends Basket implements BasketParams{
+public class RoundBasket extends Basket implements BasketParams {
 
 	private double diameter;
 
@@ -29,14 +29,14 @@ public class RoundBasket extends Basket implements BasketParams{
 		boolean smallerThanBall;
 		boolean moreThanBasketHeigh = super.isHeightSmallerThan(ball);
 		boolean moreThanBasketDiameter = ball.getDiameter() > diameter;
-		
+
 		smallerThanBall = moreThanBasketDiameter || moreThanBasketHeigh;
 		return smallerThanBall;
 	}
-	
+
 	@Override
 	public void add(Ball ball) throws BasketSmallerThanBallException, NotEnoughFreeSpaceException,
-	ExcessWeightException, NegativeValueException {
+			ExcessWeightException, NegativeValueException {
 		if (isSmallerThan(ball)) {
 			throw new BasketSmallerThanBallException("Basket is smaller than ball");
 		}
