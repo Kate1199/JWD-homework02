@@ -111,7 +111,7 @@ public class Basket {
 
 		Basket other = (Basket) obj;
 
-		return volume == other.volume && getWeightCapacity() == other.getWeightCapacity();
+		return volume == other.volume && weightCapacity == other.weightCapacity;
 	}
 
 	public double getVolume() {
