@@ -1,31 +1,36 @@
 package by.epam.kisel.bean.basket;
 
 import by.epam.kisel.bean.ball.Ball;
-import by.epam.kisel.utility.BasketSmallerThanBallException;
-import by.epam.kisel.utility.ExcessWeightException;
-import by.epam.kisel.utility.NegativeValueException;
-import by.epam.kisel.utility.NotEnoughFreeSpaceException;
 
 public class RectangleBasket extends Basket implements BasketParams {
 
 	private double length;
 	private double width;
+	
+	private static final double MIN_LENGTH = 20;
+	private static final double MIN_WIDTH = 20;
 
 	public RectangleBasket() {
 		super();
-		length = 20;
-		width = 20;
-
-		setFreeSpace(countVolume());
+		length = MIN_LENGTH;
+		width = MIN_WIDTH;
 	}
 
 	public RectangleBasket(double length, double width, double height, double weightCapacity) {
 		this.length = length;
 		this.width = width;
 		setHeight(height);
+		setVolume(countVolume());
 		setWeightCapacity(weightCapacity);
+		
+	}
+	
+	public double getLength() {
+		return length;
+	}
 
-		setFreeSpace(countVolume());
+	public double getWidth() {
+		return width;
 	}
 
 	@Override
@@ -46,23 +51,14 @@ public class RectangleBasket extends Basket implements BasketParams {
 	}
 
 	@Override
-	public void add(Ball ball) throws BasketSmallerThanBallException, NotEnoughFreeSpaceException,
-			ExcessWeightException, NegativeValueException {
-		if (isSmallerThan(ball)) {
-			throw new BasketSmallerThanBallException("Basket is smaller than ball");
-		}
-		super.add(ball);
-	}
-
-	@Override
-	public String toString() {
-		return super.toString();
+	public boolean add(Ball ball)  {
+		boolean add = !isSmallerThan(ball);
+		return add && super.add(ball);
 	}
 
 	@Override
 	public int hashCode() {
-		int hash = (int) (super.hashCode() + length - width) * 31;
-		return hash;
+		return (int) (super.hashCode() + length * 31 - width * 31);
 	}
 
 	@Override
@@ -76,16 +72,11 @@ public class RectangleBasket extends Basket implements BasketParams {
 
 		RectangleBasket other = (RectangleBasket) obj;
 
-		return length == other.length && width == other.width && getHeight() == other.getHeight()
+		return length == other.length 
+				&& width == other.width 
+				&& getHeight() == other.getHeight()
+				&& getVolume() == other.getVolume()
 				&& getWeightCapacity() == other.getWeightCapacity();
-	}
-
-	public double getLength() {
-		return length;
-	}
-
-	public double getWidth() {
-		return width;
 	}
 
 }

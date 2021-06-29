@@ -1,21 +1,26 @@
 package by.epam.kisel.bean.basket;
 
 import by.epam.kisel.bean.ball.Ball;
-import by.epam.kisel.utility.BasketSmallerThanBallException;
-import by.epam.kisel.utility.ExcessWeightException;
-import by.epam.kisel.utility.NegativeValueException;
-import by.epam.kisel.utility.NotEnoughFreeSpaceException;
 
 public class RoundBasket extends Basket implements BasketParams {
 
 	private double diameter;
+	private static final double MIN_DIAMETER = 1;
+	
+	public RoundBasket() {
+		super();
+		diameter = MIN_DIAMETER;
+	}
 
 	public RoundBasket(double diameter, double height, double weightCapacity) {
 		this.diameter = diameter;
 		setHeight(height);
 		setWeightCapacity(weightCapacity);
-
-		setFreeSpace(countVolume());
+		setVolume(countVolume());
+	}
+	
+	public double getDiameter() {
+		return diameter;
 	}
 
 	@Override
@@ -35,19 +40,11 @@ public class RoundBasket extends Basket implements BasketParams {
 	}
 
 	@Override
-	public void add(Ball ball) throws BasketSmallerThanBallException, NotEnoughFreeSpaceException,
-			ExcessWeightException, NegativeValueException {
-		if (isSmallerThan(ball)) {
-			throw new BasketSmallerThanBallException("Basket is smaller than ball");
-		}
-		super.add(ball);
+	public boolean add(Ball ball) {
+		boolean add = !isSmallerThan(ball);
+		return add && super.add(ball);
 	}
-
-	@Override
-	public String toString() {
-		return super.toString();
-	}
-
+	
 	@Override
 	public int hashCode() {
 		int hash = (int) (super.hashCode() + diameter) * 31;
@@ -65,12 +62,10 @@ public class RoundBasket extends Basket implements BasketParams {
 
 		RoundBasket other = (RoundBasket) obj;
 
-		return diameter == other.diameter && getHeight() == other.getHeight()
+		return diameter == other.diameter 
+				&& getHeight() == other.getHeight()
+				&& getVolume() == other.getVolume()
 				&& getWeightCapacity() == other.getWeightCapacity();
-	}
-
-	public double getDiameter() {
-		return diameter;
 	}
 
 }

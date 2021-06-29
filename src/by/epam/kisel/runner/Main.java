@@ -1,14 +1,10 @@
 package by.epam.kisel.runner;
 
 import by.epam.kisel.bean.ball.Ball;
-import by.epam.kisel.bean.ball.BallColours;
+import by.epam.kisel.bean.ball.Colour;
 import by.epam.kisel.bean.basket.Basket;
-import by.epam.kisel.utility.BasketSmallerThanBallException;
-import by.epam.kisel.utility.ExcessWeightException;
 import by.epam.kisel.utility.InputUtility;
-import by.epam.kisel.utility.NegativeValueException;
-import by.epam.kisel.utility.NoSuchBallAtBasketException;
-import by.epam.kisel.utility.NotEnoughFreeSpaceException;
+import by.epam.kisel.view.BasketView;
 
 public class Main {
 
@@ -19,31 +15,16 @@ public class Main {
 		Ball ball2 = InputUtility.inputBall(2);
 		Ball ball3 = InputUtility.inputBall(3);
 
-		try {
-			basket.add(ball1);
-			basket.add(ball2);
-			basket.add(ball3);
-		} catch (BasketSmallerThanBallException e) {
-			e.printStackTrace();
-		} catch (NegativeValueException e) {
-			e.printStackTrace();
-		} catch (ExcessWeightException e) {
-			e.printStackTrace();
-		} catch (NotEnoughFreeSpaceException e) {
-			e.printStackTrace();
-		}
+		basket.add(ball1);
+		basket.add(ball2);
+		basket.add(ball3);
 
 		System.out.println(basket.toString());
 
-		try {
-			basket.printBallPaintedIn(BallColours.BLUE);
-			basket.remove(ball3);
-			System.out.println("\n" + basket.toString() + "\n");
-			basket.printBallPaintedIn(BallColours.BLUE);
-		} catch (NoSuchBallAtBasketException e) {
-			e.printStackTrace();
-		}
-
+		BasketView.printBallPaintedIn(Colour.BLUE, basket);
+		basket.remove(ball3);
+		System.out.println("\n" + basket.toString());
+		BasketView.printBallPaintedIn(Colour.BLUE, basket);
 	}
 
 }

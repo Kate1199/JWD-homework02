@@ -1,97 +1,118 @@
 package by.epam.kisel.bean.basket;
 
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 import by.epam.kisel.bean.ball.Ball;
-import by.epam.kisel.bean.ball.BallColours;
-import by.epam.kisel.utility.BasketSmallerThanBallException;
-import by.epam.kisel.utility.ExcessWeightException;
-import by.epam.kisel.utility.NegativeValueException;
-import by.epam.kisel.utility.NoSuchBallAtBasketException;
-import by.epam.kisel.utility.NotEnoughFreeSpaceException;
 
 public class Basket {
 
 	private double volume;
 	private double height;
 	private double weightCapacity;
-	private double freeSpace;
-	private double weightOfBalls;
 	private ArrayList<Ball> balls = new ArrayList<>();
+	
+	private static final double MIN_VOLUME = 125;
+	private static final double MIN_WEIGHTCAPACITY = 50;
 
 	public Basket() {
-		volume = 125;
-		weightCapacity = 50;
+		volume = MIN_VOLUME;
+		weightCapacity = MIN_WEIGHTCAPACITY;
 	}
 
 	public Basket(double volume, double weightCapacity) {
 		this.volume = volume;
 		this.weightCapacity = weightCapacity;
-
-		freeSpace = volume;
+	}
+	
+	public double getVolume() {
+		return volume;
 	}
 
-	public void add(Ball ball) throws BasketSmallerThanBallException, NotEnoughFreeSpaceException,
-			ExcessWeightException, NegativeValueException {
+	public double getHeight() {
+		return height;
+	}
+
+	public double getWeightCapacity() {
+		return weightCapacity;
+	}
+	
+	protected void setVolume(double volume) {
+		this.volume = volume;
+	}
+	
+	protected void setHeight(double height) {
+		this.height = height;
+	}
+
+	protected void setWeightCapacity(double weightCapacity) {
+		this.weightCapacity = weightCapacity;
+	}
+	
+	private boolean isNegative(double ballWeight, double ballDiameter) {
+		return ballWeight <= 0 || ballDiameter <= 0;
+	}
+	
+	private boolean hasBallExcessWeight(double ballWeight) {
+		return countWeightOfBalls() + ballWeight > weightCapacity;
+	}
+	
+	private boolean hasFreeSpace(double ballVolume) {
+		return countFreeSpace() >= ballVolume;
+	}
+
+	public boolean add(Ball ball) {
 
 		double ballVolume = ball.countVolume();
 		double ballWeight = ball.getWeight();
 		double ballDiameter = ball.getDiameter();
+		
+		boolean add = !isNegative(ballWeight, ballDiameter) && !hasBallExcessWeight(ballWeight) 
+				&& hasFreeSpace(ballVolume);
 
-		if (ballWeight <= 0 || ballDiameter <= 0) {
-			throw new NegativeValueException("Ball's weight or diameter is below zero. \nWeight = " + ballWeight
-					+ " diameter = " + ballDiameter);
-		}
-
-		if (weightOfBalls + ballWeight <= weightCapacity) {
-			weightOfBalls += ballWeight;
-		} else {
-			throw new ExcessWeightException("Ball is too heavy");
-		}
-
-		if (freeSpace >= ballVolume) {
-			freeSpace -= ballVolume;
-		} else {
-			throw new NotEnoughFreeSpaceException("Too little space for the ball");
-		}
-
-		balls.add(ball);
+		return add && balls.add(ball);
 	}
 
-	public void remove(Ball ball) throws NoSuchBallAtBasketException {
+	public boolean remove(Ball ball) {
+		boolean remove = false;
 		if (balls.contains(ball)) {
-			weightOfBalls -= ball.getWeight();
-			freeSpace += ball.countVolume();
-			balls.remove(ball);
-		} else {
-			throw new NoSuchBallAtBasketException("There is no such ball in the basket");
-		}
+			remove = balls.remove(ball);
+		} 
+		return remove;
 	}
 
-	public long countBallPaintedIn(BallColours colour) throws NoSuchBallAtBasketException {
-		long numberOfPaintedBalls = 0;
-
-		Stream<Ball> ballStream = balls.stream();
-		numberOfPaintedBalls = ballStream.filter(ball -> ball.getColour().equals(colour)).count();
-
-		if (numberOfPaintedBalls == 0) {
-			throw new NoSuchBallAtBasketException("There is no such ball in the basket");
-		}
-		return numberOfPaintedBalls;
-	}
-
-	public void printBallPaintedIn(BallColours colour) throws NoSuchBallAtBasketException {
-		System.out.println("Number of balls, painted in " + colour + ": " + countBallPaintedIn(colour));
-	}
-
-	public boolean isHeightSmallerThan(Ball ball) {
+	protected boolean isHeightSmallerThan(Ball ball) {
 		return height < ball.getDiameter();
+	}
+	
+	public int size() {
+		return balls.size();
+	}
+	
+	public Ball get(int index) {
+		return balls.get(index);
+	}
+
+	public double countFreeSpace() {
+		double ballsVolume = 0;
+		double freeSpace;
+		for(Ball ball : balls) {
+			ballsVolume = ballsVolume + ball.countVolume();
+		}
+		freeSpace = volume - ballsVolume;
+		return freeSpace;
+	}
+
+	public double countWeightOfBalls() {
+		double weight = 0;
+		for(Ball ball : balls) {
+			weight = weight + ball.getWeight();
+		}
+		return weight;
 	}
 
 	@Override
 	public String toString() {
-		return balls.toString() + ", weightOfBalls = " + weightOfBalls + ", freeSpace = " + freeSpace;
+		return balls.toString() + ", weightOfBalls = " + countWeightOfBalls() + ", freeSpace = " + countFreeSpace();
 	}
 
 	@Override
@@ -113,37 +134,4 @@ public class Basket {
 
 		return volume == other.volume && weightCapacity == other.weightCapacity;
 	}
-
-	public double getVolume() {
-		return volume;
-	}
-
-	public double getHeight() {
-		return height;
-	}
-
-	public double getWeightCapacity() {
-		return weightCapacity;
-	}
-
-	public double getFreeSpace() {
-		return freeSpace;
-	}
-
-	public double getWeightOfBalls() {
-		return weightOfBalls;
-	}
-
-	public void setHeight(double height) {
-		this.height = height;
-	}
-
-	public void setWeightCapacity(double weightCapacity) {
-		this.weightCapacity = weightCapacity;
-	}
-
-	public void setFreeSpace(double freeSpace) {
-		this.freeSpace = freeSpace;
-	}
-
 }

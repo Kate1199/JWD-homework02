@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import by.epam.kisel.bean.*;
 import by.epam.kisel.bean.ball.Ball;
-import by.epam.kisel.bean.ball.BallColours;
+import by.epam.kisel.bean.ball.Colour;
 import by.epam.kisel.bean.basket.Basket;
 import by.epam.kisel.bean.basket.RectangleBasket;
 import by.epam.kisel.bean.basket.RoundBasket;
@@ -97,7 +97,7 @@ public class InputUtility {
 		diameter = inputDouble("diameter: ");
 		colourStr = inputString("colour: ");
 
-		BallColours colour = BallColours.valueOf(colourStr);
+		Colour colour = Colour.valueOf(colourStr);
 		Ball ball = new Ball(weight, diameter, colour);
 		return ball;
 	}
