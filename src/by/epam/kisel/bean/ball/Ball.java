@@ -44,11 +44,6 @@ public class Ball {
 		this.colour = colour;
 	}
 
-	public double countVolume() {
-		double volume = Math.PI * Math.pow(diameter, 3) / 6;
-		return volume;
-	}
-
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName() + " {weight = " + weight + 

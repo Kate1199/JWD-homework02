@@ -3,6 +3,7 @@ package by.epam.kisel.bean.basket;
 import java.util.ArrayList;
 
 import by.epam.kisel.bean.ball.Ball;
+import by.epam.kisel.service.BallService;
 
 public class Basket {
 
@@ -48,40 +49,47 @@ public class Basket {
 		this.weightCapacity = weightCapacity;
 	}
 	
-	private boolean isNegative(double ballWeight, double ballDiameter) {
-		return ballWeight <= 0 || ballDiameter <= 0;
+	public boolean add(Ball ball) {
+		if(BallService.isNull(ball)) return false;
+		
+		double ballWeight = ball.getWeight();
+		double ballDiameter = ball.getDiameter();
+		double ballVolume = BallService.countVolume(ballDiameter);
+		
+		boolean add = !isNegativeWeightDiameter(ballWeight, ballDiameter) && !hasBallExcessWeight(ballWeight) 
+				&& hasFreeSpace(ballVolume);
+
+		return add && balls.add(ball);
+	}
+	
+	private boolean isNegativeWeightDiameter (double ballWeight, double ballDiameter) {
+		return BallService.isNegative(ballWeight) || BallService.isNegative(ballDiameter);
 	}
 	
 	private boolean hasBallExcessWeight(double ballWeight) {
 		return countWeightOfBalls() + ballWeight > weightCapacity;
 	}
 	
+	public double countWeightOfBalls() {
+		double weight = 0;
+		for(Ball ball : balls) {
+			weight = weight + ball.getWeight();
+		}
+		return weight;
+	}
+	
 	private boolean hasFreeSpace(double ballVolume) {
 		return countFreeSpace() >= ballVolume;
 	}
-
-	public boolean add(Ball ball) {
-
-		double ballVolume = ball.countVolume();
-		double ballWeight = ball.getWeight();
-		double ballDiameter = ball.getDiameter();
-		
-		boolean add = !isNegative(ballWeight, ballDiameter) && !hasBallExcessWeight(ballWeight) 
-				&& hasFreeSpace(ballVolume);
-
-		return add && balls.add(ball);
-	}
-
-	public boolean remove(Ball ball) {
-		boolean remove = false;
-		if (balls.contains(ball)) {
-			remove = balls.remove(ball);
-		} 
-		return remove;
-	}
-
-	protected boolean isHeightSmallerThan(Ball ball) {
-		return height < ball.getDiameter();
+	
+	public double countFreeSpace() {
+		double ballsVolume = 0;
+		double freeSpace;
+		for(Ball ball : balls) {
+			ballsVolume = ballsVolume + BallService.countVolume(ball.getDiameter());
+		}
+		freeSpace = volume - ballsVolume;
+		return freeSpace;
 	}
 	
 	public int size() {
@@ -89,25 +97,32 @@ public class Basket {
 	}
 	
 	public Ball get(int index) {
-		return balls.get(index);
+		Ball ball;
+		if (checkIndex(index)) {
+			ball = new Ball(0, 0, null);
+		} else {
+			ball = balls.get(index);
+		}
+		return ball;
+	}
+	
+	private boolean checkIndex(int index) {
+		return index < 0 || index >= balls.size();
 	}
 
-	public double countFreeSpace() {
-		double ballsVolume = 0;
-		double freeSpace;
-		for(Ball ball : balls) {
-			ballsVolume = ballsVolume + ball.countVolume();
-		}
-		freeSpace = volume - ballsVolume;
-		return freeSpace;
+	public boolean remove(Ball ball) {
+		if (BallService.isNull(ball)) return false;
+		return balls.remove(ball);
 	}
 
-	public double countWeightOfBalls() {
-		double weight = 0;
-		for(Ball ball : balls) {
-			weight = weight + ball.getWeight();
-		}
-		return weight;
+	protected boolean isHeightSmallerThan(Ball ball) {
+		return height < ball.getDiameter();
+	}
+	
+	public boolean set(int index, Ball ball) {
+		if (checkIndex(index) || BallService.isNull(ball)) return false;
+		balls.set(index, ball);
+		return true;
 	}
 
 	@Override

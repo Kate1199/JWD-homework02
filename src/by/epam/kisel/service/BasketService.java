@@ -3,9 +3,9 @@ package by.epam.kisel.service;
 import by.epam.kisel.bean.ball.Colour;
 import by.epam.kisel.bean.basket.Basket;
 
-public class BasketLogic {
+public class BasketService {
 
-	public static int countBallPaintedIn(Colour colour, Basket basket) {
+	public static int countBallsPaintedIn(Colour colour, Basket basket) {
 		int numberOfPaintedBalls = 0;
 
 		if (!isNull(basket) && !isNull(colour)) {
@@ -31,5 +31,6 @@ public class BasketLogic {
 	private static boolean isNull(Object o) {
 		return o == null;
 	}
+	
 
 }
